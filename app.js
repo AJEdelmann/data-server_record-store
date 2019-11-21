@@ -1,3 +1,4 @@
+//EXTERNAL DEPENDENCIES
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -28,7 +29,8 @@ app.use(logger("dev"));
 mongoose.connect("mongodb://localhost:27017/data-server-record-store", {
   useNewUrlParser: true,
   useCreateIndex: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 
 mongoose.connection.on(
