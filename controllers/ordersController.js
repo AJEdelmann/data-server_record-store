@@ -3,7 +3,9 @@ const createError = require("http-errors");
 
 exports.getOrders = async (req, res, next) => {
     try {
-        const orders = await Order.find();
+        // you can choose what you want to show like this:
+        // const orders = await Order.find().populate('records', 'title artist year price -_id');
+        const orders = await Order.find().populate('records', ' -__v');
         res.status(200).send(orders);
     } catch (e) {
         next(e);
@@ -22,10 +24,7 @@ exports.addOrder = async (req, res, next) => {
 
 exports.getOrder = async (req, res, next) => {
     try {
-        const {
-            id
-        } = req.params;
-        const order = await Order.findById(id);
+        const order = await Order.findById(req.params.id).populate('records');
         if (!order) throw new createError.NotFound();
         res.status(200).send(user);
     } catch (e) {

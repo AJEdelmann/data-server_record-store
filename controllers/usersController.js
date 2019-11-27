@@ -3,6 +3,8 @@ const createError = require("http-errors");
 
 exports.getUsers = async (req, res, next) => {
     try {
+        //advanced queries for knowledge
+        //const users = await User.find().select('-password -__v').sort('-lastName').limit(3);
         const users = await User.find();
         res.status(200).send(users);
     } catch (e) {
@@ -22,10 +24,7 @@ exports.addUser = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-        const {
-            id
-        } = req.params;
-        const user = await User.findById(id);
+        const user = await User.findById(req.params.id);
         if (!user) throw new createError.NotFound();
         res.status(200).send(user);
     } catch (e) {

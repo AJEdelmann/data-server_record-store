@@ -34,6 +34,17 @@ const UserSchema = new Schema({
     type: Address,
     required: true
   }
+}, {
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
+});
+
+UserSchema.virtual('fullname').get(function () {
+  return this.firstName + ' ' + this.lastName;
 });
 
 module.exports = mongoose.model("User", UserSchema);
