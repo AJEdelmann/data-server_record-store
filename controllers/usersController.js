@@ -46,7 +46,8 @@ exports.deleteUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-            new: true
+            new: true,
+            runValidators: true
         });
         if (!user) throw new createError.NotFound();
         res.status(200).send(user);
