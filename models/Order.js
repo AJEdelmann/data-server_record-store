@@ -4,9 +4,9 @@ const {
 } = mongoose;
 
 const OrderSchema = new Schema({
-  userId: {
-    type: String,
-    required: true
+  user: {
+    type: Schema.Types.ObjectId,
+    required: 'User'
   },
   date: {
     type: Date,
@@ -22,6 +22,21 @@ const OrderSchema = new Schema({
       ref: 'Record'
     }
   }]
+}, {
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
+});
+
+OrderSchema.virtual('totalPrice').get(function () {
+  let records = this.records;
+  totaPriceReducer = (acc, curr) => {
+    return acc + curr.quantity * curr.record.price;
+  }
+  return records.reduce(totaPriceReducer, 0);
 });
 
 module.exports = mongoose.model("Order", OrderSchema);

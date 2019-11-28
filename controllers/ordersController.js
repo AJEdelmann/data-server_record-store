@@ -14,7 +14,9 @@ exports.getOrders = async (req, res, next) => {
 
 exports.getOrder = async (req, res, next) => {
     try {
-        const order = await Order.findById(req.params.id).populate('records.record');
+        const order = await Order.findById(req.params.id)
+            .populate('records.record')
+            .populate('user', 'userName fullName email');
         if (!order) throw new createError.NotFound();
         res.status(200).send(user);
     } catch (e) {
