@@ -28,7 +28,7 @@ exports.getRecord = async (req, res, next) => {
         } = req.params;
         const record = await Record.findById(id);
         if (!record) throw new createError.NotFound();
-        res.status(200).send(user);
+        res.status(200).send(record);
     } catch (e) {
         next(e);
     }
@@ -36,7 +36,7 @@ exports.getRecord = async (req, res, next) => {
 
 exports.deleteRecord = async (req, res, next) => {
     try {
-        const record = await Record.findAndDelete(req.params.id);
+        const record = await Record.findByIdAndDelete(req.params.id);
         if (!record) throw new createError.NotFound();
         res.status(200).send(record);
     } catch (e) {
@@ -46,7 +46,7 @@ exports.deleteRecord = async (req, res, next) => {
 
 exports.updateRecord = async (req, res, next) => {
     try {
-        const record = await Record.findByAndUpdate(req.params.id, req.body, {
+        const record = await Record.findByIdAndUpdate(req.params.id, req.body, {
             new: true
         });
         if (!record) throw new createError.NotFound();
