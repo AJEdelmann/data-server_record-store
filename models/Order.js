@@ -24,15 +24,4 @@ const OrderSchema = new Schema({
   }]
 });
 
-// records = [{
-//   quantity: 5,
-//   recordID: {
-//   }
-// },
-// {
-//   quantity: 3,
-//   recordID: {
-//   }
-// }]
-
 module.exports = mongoose.model("Order", OrderSchema);
