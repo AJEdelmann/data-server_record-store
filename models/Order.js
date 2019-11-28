@@ -4,10 +4,6 @@ const {
 } = mongoose;
 
 const OrderSchema = new Schema({
-  quantity: {
-    type: Number,
-    required: true
-  },
   userId: {
     type: String,
     required: true
@@ -17,9 +13,26 @@ const OrderSchema = new Schema({
     default: new Date()
   },
   records: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Record'
+    quantity: {
+      type: Number,
+      required: true
+    },
+    record: {
+      type: Schema.Types.ObjectId,
+      ref: 'Record'
+    }
   }]
 });
+
+// records = [{
+//   quantity: 5,
+//   recordID: {
+//   }
+// },
+// {
+//   quantity: 3,
+//   recordID: {
+//   }
+// }]
 
 module.exports = mongoose.model("Order", OrderSchema);
