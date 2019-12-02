@@ -19,6 +19,9 @@ router
   .post(userValidationRules(), userValidateErrorHandling, addUser);
 
 router
+  .route('/me').get(authenticateUser);
+
+router
   .route('/:id')
   .get(getUser)
   .delete(deleteUser)
