@@ -3,9 +3,9 @@ const createError = require("http-errors");
 
 exports.getUsers = async (req, res, next) => {
     try {
-        //advanced queries for knowledge
-        //const users = await User.find().select('-password -__v').sort('-lastName').limit(3);
-        const users = await User.find();
+        const users = await User.find()
+            .sort('lastName')
+            .select('-password -__v -tokens._id');
         res.status(200).send(users);
     } catch (e) {
         next(e);
@@ -14,7 +14,7 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(req.params.id).select('-password -__v');
         if (!user) throw new createError.NotFound();
         res.status(200).send(user);
     } catch (e) {
@@ -39,7 +39,8 @@ exports.updateUser = async (req, res, next) => {
             runValidators: true
         });
         if (!user) throw new createError.NotFound();
-        res.status(200).send(user);
+        const data = user.getPublicFields();
+        res.status(200).send(data);
     } catch (e) {
         next(e);
     }
@@ -50,10 +51,11 @@ exports.addUser = async (req, res, next) => {
         const user = new User(req.body);
         const token = user.generateAuthToken();
         await user.save();
+        const data = user.getPublicFields();
         res
             .status(200)
             .header("x-auth", token)
-            .send(user);
+            .send(data);
     } catch (e) {
         next(e);
     }

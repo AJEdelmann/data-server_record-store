@@ -64,6 +64,7 @@ const Order = require("../models/Order");
         }
       });
 
+      const token = user.generateAuthToken();
       return user.save(); // .save() is a method from mongoose that returns a promise
     });
 

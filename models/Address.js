@@ -12,6 +12,8 @@ const AddressSchema = new Schema({
         type: String,
         required: true
     }
+}, {
+    _id: false
 });
 
 module.exports = AddressSchema
