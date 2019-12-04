@@ -4,6 +4,7 @@ const {
 } = mongoose;
 const Address = require("./Address");
 const jwt = require("jsonwebtoken");
+const encrypt = require('../lib/encryption');
 
 const UserSchema = new Schema({
   id: false,
@@ -105,5 +106,14 @@ UserSchema.statics.findByToken = function (token) {
     'tokens.access': decoded.access
   });
 };
+
+UserSchema.pre('save', async function (next) {
+  // only hash the password if it has been modified (or is new);
+  if (!this.isModified('password')) return next();
+
+  this.password = await encryption.encrypt(this.password);
+  next();
+});
+
 
 module.exports = mongoose.model("User", UserSchema);

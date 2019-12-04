@@ -61,6 +61,14 @@ exports.addUser = async (req, res, next) => {
     }
 };
 
+exports.loginUser = async (req, res, next) => {
+    res.status(200).send('Great password');
+    // Get email and pass from the body
+    // Get the user by email
+    // Access user.password (hashed password)
+    // Write a method that takes in user.password and password
+}
+
 exports.authenticateUser = async (req, res, next) => {
     res.status(200).send(req.user);
 };
