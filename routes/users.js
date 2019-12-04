@@ -4,7 +4,6 @@ const {
   userValidationRules,
   userValidateErrorHandling
 } = require('../validators/validator');
-
 const auth = require('../middleware/authenticator');
 
 const {

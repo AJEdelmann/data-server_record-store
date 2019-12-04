@@ -4,7 +4,7 @@ const {
 } = mongoose;
 const Address = require("./Address");
 const jwt = require("jsonwebtoken");
-const encrypt = require('../lib/encryption');
+const encryption = require('../lib/encryption');
 
 const UserSchema = new Schema({
   id: false,
@@ -28,7 +28,7 @@ const UserSchema = new Schema({
   birthday: {
     type: Date
   },
-  username: {
+  userName: {
     type: String,
     required: true,
     unique: true
@@ -36,18 +36,7 @@ const UserSchema = new Schema({
   address: {
     type: Address,
     required: true
-  },
-  tokens: [{
-    _id: false,
-    access: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-    }
-  }]
+  }
 }, {
   toJSON: {
     virtuals: true
@@ -72,12 +61,12 @@ UserSchema.methods.generateAuthToken = function () {
     }, "babylon")
     .toString();
 
-  user.tokens.push({
-    access,
-    token
-  });
-
   return token;
+};
+
+UserSchema.methods.checkPassword = async function (password) {
+  const user = this;
+  return await encryption.compare(password, user.password);
 };
 
 UserSchema.methods.getPublicFields = function () {
@@ -95,15 +84,14 @@ UserSchema.methods.getPublicFields = function () {
 UserSchema.statics.findByToken = function (token) {
   const User = this;
   let decoded;
+
   try {
     decoded = jwt.verify(token, 'babylon');
   } catch (err) {
     return;
   }
   return User.findOne({
-    _id: decoded._id,
-    'tokens.token': token,
-    'tokens.access': decoded.access
+    _id: decoded._id
   });
 };
 

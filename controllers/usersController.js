@@ -4,8 +4,8 @@ const createError = require("http-errors");
 exports.getUsers = async (req, res, next) => {
     try {
         const users = await User.find()
-            .sort('lastName')
-            .select('-password -__v -tokens._id');
+            .sort("lastName")
+            .select("-password -__v -tokens._id");
         res.status(200).send(users);
     } catch (e) {
         next(e);
@@ -14,7 +14,7 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id).select('-password -__v');
+        const user = await User.findById(req.params.id).select("-password -__v");
         if (!user) throw new createError.NotFound();
         res.status(200).send(user);
     } catch (e) {
@@ -62,12 +62,28 @@ exports.addUser = async (req, res, next) => {
 };
 
 exports.loginUser = async (req, res, next) => {
-    res.status(200).send('Great password');
     // Get email and pass from the body
-    // Get the user by email
-    // Access user.password (hashed password)
-    // Write a method that takes in user.password and password
-}
+    const email = req.body.email;
+    const password = req.body.password;
+    try {
+        // Get the user by email
+        const user = await User.findOne({
+            email
+        });
+        const token = user.generateAuthToken();
+        // Write a method that takes in user.password and password
+        const canLogin = await user.checkPassword(password);
+        if (!canLogin) throw new createError.NotFound();
+        const data = user.getPublicFields();
+
+        res
+            .status(200)
+            .header("x-auth", token)
+            .send(data);
+    } catch (e) {
+        next(e);
+    }
+};
 
 exports.authenticateUser = async (req, res, next) => {
     res.status(200).send(req.user);
