@@ -20,7 +20,7 @@ const {
 router
   .route('/')
   .get(auth, getUsers)
-  .post(userValidationRules(), userValidateErrorHandling, addUser);
+  .post(addUser);
 
 router.route('/me').get(auth, authenticateUser);
 router.route('/login').post(loginUser);

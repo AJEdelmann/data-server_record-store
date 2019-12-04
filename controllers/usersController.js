@@ -49,6 +49,7 @@ exports.updateUser = async (req, res, next) => {
 exports.addUser = async (req, res, next) => {
     try {
         const user = new User(req.body);
+        console.log(user);
         const token = user.generateAuthToken();
         await user.save();
         const data = user.getPublicFields();

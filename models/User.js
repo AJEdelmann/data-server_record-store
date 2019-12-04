@@ -76,6 +76,7 @@ UserSchema.methods.getPublicFields = function () {
     firstName: this.firstName,
     email: this.email,
     fullName: this.fullName,
+    userName: this.userName,
     birthday: new Date(this.birthday),
     address: this.address
   };

@@ -57,7 +57,7 @@ const Order = require("../models/Order");
         email: faker.internet.email(),
         password: faker.internet.password(),
         birthday: faker.date.past(),
-        username: faker.internet.userName(),
+        userName: faker.internet.userName(),
         address: {
           city: faker.address.city(),
           street: faker.address.streetName()
